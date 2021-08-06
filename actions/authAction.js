@@ -70,6 +70,7 @@ export const loginAction = userDetails => dispatch => axios
 *
 * @return {object} dispatch object
 */
+
 export const changePassword = (email, userDetails) => (dispatch) => axios
 .post(`https://truckee.azurewebsites.net/driver/auth/changepassword/${email}`, userDetails)
 .then((response) => {
