@@ -40,7 +40,6 @@ function AuthScreen() {
       <Tab.Screen
         name="SignUp"
         component={SignUp}
-        
         options={{
           tabBarLabel: 'Sign Up',
           tabBarIcon: ({}) => (
@@ -52,9 +51,9 @@ function AuthScreen() {
         component={SignIn}
         options={{
           tabBarLabel: 'Log In',
-          // tabBarIcon: ({}) => (
-          //   <Image source={truckeeLogo} style={styles.truckeeLogo}/>
-          // ),
+          tabBarIcon: ({}) => (
+            <></>
+          ),
         }} />
     </Tab.Navigator>
     
