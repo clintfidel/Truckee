@@ -109,6 +109,8 @@ function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, 
             <Text style={styles.delivery}>{`Delivery-${singleDelivery.orderId}`}</Text>
           </View>
         </View>
+        <ScrollView
+          style={styles.background}>
         <View style={styles.footer}>
           <View style={styles.activeDeliveryCont}>
             <View style={styles.activeDelivery}>
@@ -243,10 +245,14 @@ function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, 
               />
             </View>
         </View>
+        </ScrollView>
       </View>
   );
 }
 const styles = StyleSheet.create({
+  background: {
+    flex: 4,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -256,7 +262,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   header: {
-    flex: 1,
     backgroundColor: "#2B6684",
     paddingLeft: 15,
     paddingRight: 15,
