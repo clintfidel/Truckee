@@ -43,6 +43,20 @@ function Home({ navigation, getConfirmedDeliveries, auth, deliveries }) {
     }
   };
 
+  const checkNullBulkreaker = (value) => {
+    if(value.bulkbreakerId !== null) {
+      return value.bulkbreakerId.address
+    }
+    return "No address Found"
+  }
+
+  const checkNullPoc = (value) => {
+    if(value.pocId !== null) {
+      return value.pocId.address
+    }
+    return "No address Found"
+  }
+
   return (
     <ScrollView style={styles.bg}>
       <View style={styles.container}>
@@ -97,9 +111,10 @@ function Home({ navigation, getConfirmedDeliveries, auth, deliveries }) {
         } */}
           {status ? (
             <View>
-              {deliveries.confirmedDeliveries.length > 0 ? (
+              {deliveries && deliveries.confirmedDeliveries.length > 0 ? (
                 <View>
-                  {deliveries.confirmedDeliveries.map((value) => {
+                  {deliveries && deliveries.confirmedDeliveries.map((value) => {
+                    console.log(checkNullBulkreaker(value), '-----')
                     return (
                       <TouchableOpacity
                         key={value.orderId}
@@ -134,9 +149,10 @@ function Home({ navigation, getConfirmedDeliveries, auth, deliveries }) {
                               <Text style={styles.locationText1}>To</Text>
                               <Text style={styles.locationDot2} />
                               <Text style={styles.locationText2}>
-                                {value.bulkbreakerId
-                                  ? value.bulkbreakerId.address
-                                  : value.pocId.address}
+                              {checkNullBulkreaker(value)
+                                  ? checkNullBulkreaker(value)
+                                  : checkNullPoc(value)
+                                  }
                               </Text>
                             </View>
                           </View>

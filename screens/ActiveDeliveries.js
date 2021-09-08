@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
     paddingLeft: 22,
     paddingRight: 22,
     backgroundColor: "#2B6684",
-    marginLeft: 140,
+    marginLeft: Dimensions.get("window").width * 0.28,
   },
   callText: {
     color: "#FFFFFF",
