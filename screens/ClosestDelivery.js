@@ -25,6 +25,14 @@ function Delivery({ navigation, auth, getSingleDelivery, route, acceptDelivery, 
     acceptDelivery(route.params?.orderId, auth.email)
   }, []);
 
+  const getTotalCases = () => {
+    let total = 0;
+    singleDelivery.items.forEach((item) => {
+      total+=item.quantity;
+    });
+    return total
+  }
+
   const getAddress = () => {
     if(singleDelivery.pocId) {
       return singleDelivery.pocId.address
@@ -87,7 +95,7 @@ function Delivery({ navigation, auth, getSingleDelivery, route, acceptDelivery, 
               <View style={styles.deliveryItem}>
                 <Image source={box}/>
                 <View style={styles.itemTextCont}>
-                  <Text style={styles.itemText1}>15</Text>
+                  <Text style={styles.itemText1}>{getTotalCases()}</Text>
                   <Text style={styles.itemText2}>creates</Text>
                 </View>
               </View>
@@ -100,7 +108,7 @@ function Delivery({ navigation, auth, getSingleDelivery, route, acceptDelivery, 
               </View> */}
             </View>
             <Text style={styles.estimate}>ESTIMATED EARNING</Text>
-            <Text style={styles.estimateAmount}>#20,350</Text>
+            <Text style={styles.estimateAmount}>{singleDelivery.totalAmount}</Text>
           </View>
         </View>
         <View style={styles.footer}>

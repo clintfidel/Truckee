@@ -49,6 +49,7 @@ export const getConfirmedDeliveries = () => (dispatch) =>
     axios
       .patch(`https://shopnow.azurewebsites.net/truckee/${id}`)
       .then((response) => {
+        console.log(response, 'finished')
         dispatch({
           type: FINISH_DELIVERY,
           order: response.data.order,

@@ -114,7 +114,6 @@ function Home({ navigation, getConfirmedDeliveries, auth, deliveries }) {
               {deliveries && deliveries.confirmedDeliveries.length > 0 ? (
                 <View>
                   {deliveries && deliveries.confirmedDeliveries.map((value) => {
-                    console.log(checkNullBulkreaker(value), '-----')
                     return (
                       <TouchableOpacity
                         key={value.orderId}

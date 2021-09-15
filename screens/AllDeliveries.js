@@ -74,11 +74,11 @@ function AllDeliveries({ navigation, getAllDeliveries, deliveries }) {
             return (
               <>
                 <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                  navigation.navigate("Root", { screen: "ActiveDeliveries", params: { orderId: value._id },
-                  merge: true, })
-                  }
+                  // key={index}
+                  // onPress={() =>
+                  // navigation.navigate("Root", { screen: "ActiveDeliveries", params: { orderId: value._id },
+                  // merge: true, })
+                  // }
                 >
                   <View key={index} style={styles.dateText}>
                     <View style={styles.dottedDate}>

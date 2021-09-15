@@ -11,57 +11,69 @@ import {
   Platform,
   Linking,
 } from "react-native";
-import moment from 'moment';
+import moment from "moment";
 import { getSingleDelivery, finishDelivery } from "../actions/deliveryAction";
 import { connect } from "react-redux";
-import Toast from 'react-native-root-toast';
+import Toast from "react-native-root-toast";
 import box from "../assets/box.png";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 
-function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, acceptDelivery, singleDelivery }) {
+function ActiveDelivery({
+  navigation,
+  finishDelivery,
+  route,
+  getSingleDelivery,
+  acceptDelivery,
+  singleDelivery,
+}) {
   const [status, setStatus] = React.useState(false);
   useEffect(() => {
     getSingleDelivery(route.params?.orderId);
     // finishDelivery(route.params?.orderId)
   }, []);
 
-  const getAddress = () => {
-    if(singleDelivery.pocId) {
-      return singleDelivery.pocId.address
+  const checkNullBulkreaker = (value) => {
+    if (value.bulkbreakerId !== null) {
+      return value.bulkbreakerId.address;
     }
-    else if (singleDelivery.bulkbreakerId) {
-      return singleDelivery.bulkbreakerId.address
+    return "No address Found";
+  };
+
+  const checkNullPoc = (value) => {
+    if (value.pocId !== null) {
+      return value.pocId.address;
     }
-    else {
-      return ""
-    }
-  }
+    return "No address Found";
+  };
+
   const driverFinishDeivery = () => {
     finishDelivery(acceptDelivery._id)
-    .then(() => {
-      let toast = Toast.show('Delivery Completed', {
-        duration: Toast.durations.LONG,
+      .then(() => {
+        let toast = Toast.show("Delivery Completed", {
+          duration: Toast.durations.LONG,
+        });
+        setTimeout(() => {
+          Toast.hide(toast);
+          navigation.navigate("DrawerNavigationRoutes", {
+            screen: "All Delivery",
+          });
+        }, 3000);
+      })
+      .catch((message) => {
+        let toast = Toast.show("Cannot Complete Delivery", {
+          duration: Toast.durations.LONG,
+        });
+        Toast.hide(toast);
+        // setLoader(false)
+        // toastrOption();
       });
-      setTimeout(() => {
-        Toast.hide(toast)
-        navigation.navigate("DrawerNavigationRoutes", { screen: "All Delivery" })
-      }, 3000);
-    })
-    .catch((message) => {
-      let toast = Toast.show('Cannot Complete Delivery', {
-        duration: Toast.durations.LONG,
-      });
-      Toast.hide(toast)        
-      // setLoader(false)
-      // toastrOption();
-    })
-  }
+  };
   const toggleStatus = () => {
     if (status) {
       setStatus(false);
     } else {
-      driverFinishDeivery()
+      driverFinishDeivery();
       setStatus(true);
     }
   };
@@ -89,35 +101,36 @@ function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, 
     }
   };
   return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.topHeader}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("DrawerNavigationRoutes", {
-                  screen: "Home",
-                })
-              }
-            >
-              <Ionicons
-                style={styles.iconBack}
-                size={20}
-                name="arrow-back-circle-outline"
-                color="#fff"
-              />
-            </TouchableOpacity>
-            <Text style={styles.delivery}>{`Delivery-${singleDelivery.orderId}`}</Text>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.topHeader}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("DrawerNavigationRoutes", {
+                screen: "Home",
+              })
+            }
+          >
+            <Ionicons
+              style={styles.iconBack}
+              size={20}
+              name="arrow-back-circle-outline"
+              color="#fff"
+            />
+          </TouchableOpacity>
+          <Text
+            style={styles.delivery}
+          >{`Delivery-${singleDelivery.orderId}`}</Text>
         </View>
-        <ScrollView
-          style={styles.background}>
+      </View>
+      <ScrollView style={styles.background}>
         <View style={styles.footer}>
           <View style={styles.activeDeliveryCont}>
             <View style={styles.activeDelivery}>
               <Text style={styles.activeDeliveryText}>Active delivery</Text>
             </View>
             <Text style={styles.activeDeliveryDate}>
-              {moment().format(('MMMM Do YYYY, h:mm a'))}
+              {moment().format("MMMM Do YYYY, h:mm a")}
             </Text>
           </View>
           <View style={styles.location}>
@@ -142,7 +155,13 @@ function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, 
                   <Text style={styles.locationText2}>
                     256 Market Street, Lagos, Nigeria
                   </Text>
-                  <TouchableOpacity onPress={copyToClipboard(getAddress())}>
+                  <TouchableOpacity
+                    onPress={copyToClipboard(
+                      checkNullBulkreaker(singleDelivery)
+                        ? checkNullBulkreaker(singleDelivery)
+                        : checkNullPoc(singleDelivery)
+                    )}
+                  >
                     <Ionicons
                       style={styles.icon}
                       size={20}
@@ -155,9 +174,17 @@ function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, 
               <View style={styles.itemCont}>
                 <View style={styles.deliveryItem}>
                   <Text style={styles.locationText2}>
-                    { getAddress()}
+                    {checkNullBulkreaker(singleDelivery)
+                      ? checkNullBulkreaker(singleDelivery)
+                      : checkNullPoc(singleDelivery)}
                   </Text>
-                  <TouchableOpacity onPress={copyToClipboard(getAddress())}>
+                  <TouchableOpacity
+                    onPress={copyToClipboard(
+                      checkNullBulkreaker(singleDelivery)
+                        ? checkNullBulkreaker(singleDelivery)
+                        : checkNullPoc(singleDelivery)
+                    )}
+                  >
                     <Ionicons
                       style={styles.icon}
                       size={20}
@@ -171,7 +198,7 @@ function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, 
           </View>
           <View style={styles.deliveryDetails}>
             <View style={styles.itemTextCont}>
-              <Image source={box}/>
+              <Image source={box} />
               <View style={styles.cont1}>
                 <Text style={styles.itemText1}>15</Text>
                 <Text style={styles.itemText2}>Crates</Text>
@@ -216,37 +243,39 @@ function ActiveDelivery({ navigation, finishDelivery, route, getSingleDelivery, 
               name="warning-outline"
               color="#fff"
             />
-              <Text style={styles.warningText} >After delivery, finish the order by using {'\n'} the button below</Text>
+            <Text style={styles.warningText}>
+              After delivery, finish the order by using {"\n"} the button below
+            </Text>
           </View>
 
-            <View style={styles.slider}>
-              <FlipToggle
-                value={status}
-                style={styles.toggle}
-                buttonWidth={300}
-                buttonHeight={55}
-                buttonRadius={50}
-                sliderWidth={50}
-                sliderHeight={50}
-                sliderRadius={60}
-                sliderOffColor="#2B6684"
-                sliderOnColor="#fff"
-                buttonOffColor="#fff"
-                buttonOnColor="#2B6684"
-                onLabel={`FINISHED`}
-                offLabel={"SLIDE TO FINISH"}
-                labelStyle={{
-                  color: `${status ? "#fff" : "#000"}`,
-                  fontSize: 14,
-                  fontWeight: "bold",
-                }}
-                onToggle={toggleStatus}
-                onToggleLongPress={() => console.log("toggle long pressed!")}
-              />
-            </View>
+          <View style={styles.slider}>
+            <FlipToggle
+              value={status}
+              style={styles.toggle}
+              buttonWidth={300}
+              buttonHeight={55}
+              buttonRadius={50}
+              sliderWidth={50}
+              sliderHeight={50}
+              sliderRadius={60}
+              sliderOffColor="#2B6684"
+              sliderOnColor="#fff"
+              buttonOffColor="#fff"
+              buttonOnColor="#2B6684"
+              onLabel={`FINISHED`}
+              offLabel={"SLIDE TO FINISH"}
+              labelStyle={{
+                color: `${status ? "#fff" : "#000"}`,
+                fontSize: 14,
+                fontWeight: "bold",
+              }}
+              onToggle={toggleStatus}
+              onToggleLongPress={() => console.log("toggle long pressed!")}
+            />
+          </View>
         </View>
-        </ScrollView>
-      </View>
+      </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
@@ -278,7 +307,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     marginTop: 7,
-    marginLeft: 20
+    marginLeft: 20,
   },
   activeDeliveryCont: {
     display: "flex",
@@ -305,7 +334,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 15,
     borderRadius: 5,
-
   },
   warningText: {
     color: "#fff",
@@ -353,7 +381,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginRight: 65,
     justifyContent: "center",
-    alignContent: "center"
+    alignContent: "center",
   },
   itemText1: {
     fontSize: 16,
@@ -431,20 +459,20 @@ const styles = StyleSheet.create({
   },
   slider: {
     justifyContent: "center",
-		alignItems: "center",
-		marginTop: 40,
-		marginBottom: 50,
+    alignItems: "center",
+    marginTop: 40,
+    marginBottom: 50,
     backgroundColor: "#fff",
     width: 300,
     height: 50,
     borderRadius: 55,
-		shadowColor: "black",
-		shadowOffset: {
-			width: 2,
-			height: 3
-		},
-		shadowOpacity: 0.5,
-		elevation: 12
+    shadowColor: "black",
+    shadowOffset: {
+      width: 2,
+      height: 3,
+    },
+    shadowOpacity: 0.5,
+    elevation: 12,
   },
   locationText2: {
     color: "#000000",
@@ -522,5 +550,6 @@ const mapStateToProps = (state) => {
     auth: state.AuthReducer.user.user,
   };
 };
-export default connect(mapStateToProps, { getSingleDelivery, finishDelivery })(ActiveDelivery);
-
+export default connect(mapStateToProps, { getSingleDelivery, finishDelivery })(
+  ActiveDelivery
+);
