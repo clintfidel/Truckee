@@ -239,7 +239,7 @@ function ActiveDelivery({
                 name="call"
                 color="#9CACBF"
               />
-              <Text style={styles.customerName}>{singleDelivery.sellerMobile}</Text>
+              <Text style={styles.customerName}>{singleDelivery.buyerMobile}</Text>
               <View style={styles.call}>
                 <TouchableOpacity onPress={dialCall} activeOpacity={0.7}>
                   <Text style={styles.callText}>Call</Text>
