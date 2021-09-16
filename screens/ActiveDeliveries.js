@@ -49,10 +49,13 @@ function ActiveDelivery({
 
   const getTotalCases = (value) => {
     let total = 0;
+    if (value.items) {
       value.items.map((val, index) => {
-        total +=val['quantity']
-      })
-      return total
+        total += val["quantity"];
+      });
+    }
+
+    return total;
   }
   const driverFinishDeivery = () => {
     finishDelivery(acceptDelivery._id)
@@ -236,7 +239,7 @@ function ActiveDelivery({
                 name="call"
                 color="#9CACBF"
               />
-              <Text style={styles.customerName}>08012345678</Text>
+              <Text style={styles.customerName}>{singleDelivery.sellerMobile}</Text>
               <View style={styles.call}>
                 <TouchableOpacity onPress={dialCall} activeOpacity={0.7}>
                   <Text style={styles.callText}>Call</Text>
