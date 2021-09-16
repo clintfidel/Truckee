@@ -94,7 +94,7 @@ function Delivery({ navigation, auth, getSingleDelivery, route, acceptDelivery, 
                 <Image source={box}/>
                 <View style={styles.itemTextCont}>
                   <Text style={styles.itemText1}>{getTotalCases(singleDelivery)}</Text>
-                  <Text style={styles.itemText2}>creates</Text>
+                  <Text style={styles.itemText2}>case(s)</Text>
                 </View>
               </View>
               {/* <View style={styles.deliveryItem}>

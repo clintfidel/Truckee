@@ -12,7 +12,7 @@ import {
   Linking,
 } from "react-native";
 import moment from "moment";
-import { getSingleDelivery, finishDelivery } from "../actions/deliveryAction";
+import { getSingleDelivery, finishDelivery, getConfirmedDeliveries } from "../actions/deliveryAction";
 import { connect } from "react-redux";
 import Toast from "react-native-root-toast";
 import box from "../assets/box.png";
@@ -47,6 +47,13 @@ function ActiveDelivery({
     return "No address Found";
   };
 
+  const getTotalCases = (value) => {
+    let total = 0;
+      value.items.map((val, index) => {
+        total +=val['quantity']
+      })
+      return total
+  }
   const driverFinishDeivery = () => {
     finishDelivery(acceptDelivery._id)
       .then(() => {
@@ -56,8 +63,8 @@ function ActiveDelivery({
         setTimeout(() => {
           Toast.hide(toast);
           navigation.navigate("DrawerNavigationRoutes", {
-            screen: "All Delivery",
-          });
+            screen: "Home",
+          })
         }, 3000);
       })
       .catch((message) => {
@@ -69,8 +76,9 @@ function ActiveDelivery({
         // toastrOption();
       });
   };
-  const toggleStatus = () => {
+  const toggleStatus = async() => {
     if (status) {
+      await getConfirmedDeliveries()
       setStatus(false);
     } else {
       driverFinishDeivery();
@@ -200,8 +208,8 @@ function ActiveDelivery({
             <View style={styles.itemTextCont}>
               <Image source={box} />
               <View style={styles.cont1}>
-                <Text style={styles.itemText1}>15</Text>
-                <Text style={styles.itemText2}>Crates</Text>
+                <Text style={styles.itemText1}>{getTotalCases(singleDelivery)}</Text>
+                <Text style={styles.itemText2}>Case(s)</Text>
               </View>
             </View>
             {/* <View style={styles.itemTextCont}>
@@ -550,6 +558,6 @@ const mapStateToProps = (state) => {
     auth: state.AuthReducer.user.user,
   };
 };
-export default connect(mapStateToProps, { getSingleDelivery, finishDelivery })(
+export default connect(mapStateToProps, { getSingleDelivery, finishDelivery, getConfirmedDeliveries })(
   ActiveDelivery
 );
