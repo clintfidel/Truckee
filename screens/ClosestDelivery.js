@@ -19,18 +19,16 @@ import { connect } from "react-redux";
 
 
 function Delivery({ navigation, auth, getSingleDelivery, route, acceptDelivery, singleDelivery }) {
-
   useEffect(() => {
     getSingleDelivery(route.params?.orderId);
-    acceptDelivery(route.params?.orderId, auth.email)
   }, []);
 
-  const getTotalCases = () => {
+  const getTotalCases = (value) => {
     let total = 0;
-    singleDelivery.items.forEach((item) => {
-      total+=item.quantity;
-    });
-    return total
+      value.items.map((val, index) => {
+        total +=val['quantity']
+      })
+      return total
   }
 
   const getAddress = () => {
@@ -95,7 +93,7 @@ function Delivery({ navigation, auth, getSingleDelivery, route, acceptDelivery, 
               <View style={styles.deliveryItem}>
                 <Image source={box}/>
                 <View style={styles.itemTextCont}>
-                  <Text style={styles.itemText1}>{getTotalCases()}</Text>
+                  <Text style={styles.itemText1}>{getTotalCases(singleDelivery)}</Text>
                   <Text style={styles.itemText2}>creates</Text>
                 </View>
               </View>
@@ -142,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalBody: {
-    height: 410,
+    height: Dimensions.get("window").width * 1.3,
     width: Dimensions.get("window").width * 0.8,
     paddingTop: 40,
     paddingBottom: 40,
